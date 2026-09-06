@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import br.com.educamais.app.mock.salasEstudo
 import br.com.educamais.app.navigation.RESULTADO_PRESENCA_CONFIRMADA
 import br.com.educamais.app.navigation.Routes
 
@@ -103,13 +102,9 @@ fun TelaHome(navController: NavHostController) {
                     aoAbrirCurso = { id -> navController.navigate(Routes.cursoDetalhe(id)) }
                 )
 
-                AbaHome.SALAS -> Column(modifier = Modifier.padding(16.dp)) {
-                    salasEstudo.forEach { sala ->
-                        TextButton(
-                            onClick = { navController.navigate(Routes.salaDetalhe(sala.id)) }
-                        ) { Text(sala.titulo) }
-                    }
-                }
+                AbaHome.SALAS -> AbaSalas(
+                    aoAbrirSala = { id -> navController.navigate(Routes.salaDetalhe(id)) }
+                )
 
                 AbaHome.PERFIL -> Column(modifier = Modifier.padding(16.dp)) {
                     Text("Perfil (Fase 9 monta a tela final)")
