@@ -26,3 +26,5 @@ val alertasEvasao: List<AlertaEvasao> = listOf(
         probabilidade = 42
     )
 )
+
+fun alertaMaisCritico(): AlertaEvasao? = alertasEvasao.maxByOrNull { it.probabilidade }

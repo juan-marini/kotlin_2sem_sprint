@@ -247,6 +247,9 @@ val cursos: List<Curso> = listOf(
 
 fun buscarCursoPorId(id: String): Curso? = cursos.firstOrNull { it.id == id }
 
+fun cursosEmAndamento(): List<Curso> =
+    cursos.filter { it.progresso > 0f && it.progresso < 1f }.sortedByDescending { it.progresso }
+
 fun categoriasDeCursos(): List<String> = cursos.map { it.categoria }.distinct().sorted()
 
 fun filtrarCursos(busca: String = "", categoria: String? = null): List<Curso> {

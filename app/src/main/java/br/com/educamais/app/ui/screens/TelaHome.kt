@@ -1,5 +1,6 @@
 package br.com.educamais.app.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import br.com.educamais.app.mock.cursos
 import br.com.educamais.app.mock.salasEstudo
 import br.com.educamais.app.navigation.RESULTADO_PRESENCA_CONFIRMADA
 import br.com.educamais.app.navigation.Routes
@@ -38,9 +38,8 @@ private enum class AbaHome(val titulo: String, val emoji: String) {
 }
 
 // Casca da Home: NavigationBar de 4 abas, top bar própria com título por
-// aba e ação de info, e FAB estendido da EdIA. O conteúdo de cada aba ainda
-// é provisório — as Fases 7, 8 e 9 dão o layout final a Início/Cursos,
-// Salas e Perfil respectivamente.
+// aba e ação de info, e FAB estendido da EdIA. Início e Cursos já têm o
+// layout final (Fase 7); Salas e Perfil ainda são provisórios (Fases 8 e 9).
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaHome(navController: NavHostController) {
@@ -89,24 +88,22 @@ fun TelaHome(navController: NavHostController) {
             }
         }
     ) { paddingInterno ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingInterno)
-                .padding(16.dp)
         ) {
             when (abaSelecionada) {
-                AbaHome.INICIO -> Text("Início (Fase 7 monta o dashboard)")
+                AbaHome.INICIO -> AbaInicio(
+                    aoAbrirCurso = { id -> navController.navigate(Routes.cursoDetalhe(id)) },
+                    aoAbrirSala = { id -> navController.navigate(Routes.salaDetalhe(id)) }
+                )
 
-                AbaHome.CURSOS -> Column {
-                    cursos.forEach { curso ->
-                        TextButton(
-                            onClick = { navController.navigate(Routes.cursoDetalhe(curso.id)) }
-                        ) { Text(curso.titulo) }
-                    }
-                }
+                AbaHome.CURSOS -> AbaCursos(
+                    aoAbrirCurso = { id -> navController.navigate(Routes.cursoDetalhe(id)) }
+                )
 
-                AbaHome.SALAS -> Column {
+                AbaHome.SALAS -> Column(modifier = Modifier.padding(16.dp)) {
                     salasEstudo.forEach { sala ->
                         TextButton(
                             onClick = { navController.navigate(Routes.salaDetalhe(sala.id)) }
@@ -114,7 +111,7 @@ fun TelaHome(navController: NavHostController) {
                     }
                 }
 
-                AbaHome.PERFIL -> Column {
+                AbaHome.PERFIL -> Column(modifier = Modifier.padding(16.dp)) {
                     Text("Perfil (Fase 9 monta a tela final)")
                     TextButton(onClick = { navController.navigate(Routes.SOBRE) }) {
                         Text("Sobre")
